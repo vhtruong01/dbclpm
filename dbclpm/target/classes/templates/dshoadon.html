@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ds hóa đơn</title>
+<script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body>
+	<div th:if="${keyword != null}" class="flex justify-center items-center">
+		<h1 class="mb-6 text-5xl px-6 mt-6">Danh sách hóa đơn tương ứng với "<span th:text="${keyword}"></span>"</h1>
+	</div>
+	<div th:if="${#lists.size(dsHoaDon) == 0}" class="flex justify-center items-center">
+		<h1 class="mb-6 text-5xl px-6 mt-6">Chưa có hóa đơn nào!</h1>
+	</div>
+	<div class="my-5 text-center">
+        <a href="javascript:history.back()" class="px-6 py-3 text-lg font-semibold bg-red-500 hover:bg-red-700 text-white rounded-xl">Quay lại</a>
+    </div>
+	<div th:each="o : ${dsHoaDon}" class="flex justify-center items-center">
+		<div class="px-6 text-center">
+			<div class="w-full">
+				<a th:href="@{/detail/{id}(id = ${o.hoadon_id})}" class="px-5">
+					<div class="pr-6 flex bg-gray-100 rounded-xl justify-between items-center h-24">
+						<div class="pr-6">
+							<p th:if="${o.trangThai == 'Chưa nộp'}" class="text-4xl px-6">
+								<p th:text="${#dates.format(o.thoiGian, 'dd/MM/yyyy')}" class="text-4xl px-6 text-gray-500"></p>
+							</p>
+						</div>
+						<div class="pr-6">
+							<p th:if="${o.trangThai == 'Chưa nộp'}" class="text-xl px-6">
+								Hóa đơn - <span th:text="${o.trangThai}" class="text-red-500"></span>
+							</p>
+						</div>
+						<div class="pr-6">
+							<p th:if="${o.trangThai == 'Đã nộp'}" class="text-xl px-6">
+								Hóa đơn --- <span th:text="${o.trangThai}" class="text-green-500"></span>
+							</p>
+						</div>
+					</div>
+				</a>
+			</div>
+		</div>
+	</div>
+</body>
+
+</html>
