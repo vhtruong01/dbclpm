@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>hệ thống quản lí nước</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+    <style>
+        table {
+            border-collapse: collapse;
+        }
+        
+        td {
+            padding: 5px 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="px-10 flex items-center border-b border-gray-200">
+        <a href="/" class="font-semibold">
+            <img src="https://phuongnamvina.com/img_data/images/logo-nuoc-uong.jpg"
+                style="height: 80px;" alt="">
+            HỆ THỐNG QUẢN LÝ NƯỚC HÀ NỘI
+
+        </a>
+        <div class="space-x-6 dropdown ml-auto">
+            <a th:if="${session.hodan != null}" th:href="@{/xem-hoa-don}" class="px-6 py-3 text-lg font-semibold bg-green-500 hover:bg-green-700 text-white rounded-xl"> Xem hóa đơn</a>
+            <a th:if="${session.nv?.chucVu == 'nhân viên hành chính'}" href="/timhodan" class="px-6 py-3 text-lg font-semibold bg-blue-500 hover:bg-blue-700 text-white rounded-xl"> Thanh toán cho khách hàng</a>
+			<a th:if="${session.hodan != null}" href="/xem-dong-ho" class="px-6 py-3 text-lg font-semibold bg-yellow-500 hover:bg-yellow-700 text-white rounded-xl"> Xem đồng hồ</a>
+            <a th:if="${session.nv?.chucVu == 'nhân viên hành chính'}" href="/signup" class="px-6 py-3 text-lg font-semibold bg-green-500 hover:bg-green-700 text-white rounded-xl">Đăng kí hộ dân</a>
+            <a th:if="${session.nv?.chucVu == 'nhân viên ghi nước'}" href="/cap-nhat-so-nuoc" class="px-6 py-3 text-lg font-semibold bg-green-500 hover:bg-green-700 text-white rounded-xl">Cập nhật số nước</a>
+            
+            <button class="dropdown-toggle bg-orange-500 hover:bg-orange-700 rounded-xl px-2 py-2 text-lg text-white font-bold" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false" title="Chi tiết">
+			    <span th:if="${session.hodan == null && session.nv == null}">Đăng nhập</span>
+                <span th:if="${session.hodan != null}" th:text="${session.hodan?.tenChuHo}"></span>
+                <span th:if="${session.nv != null}" th:text="${session.nv?.ten}"></span>
+			</button>
+            
+            <ul class="dropdown-menu text-center" aria-labelledby="dropdownMenuButton1">
+                <li th:if="${session.hodan == null && session.nv == null}"><a class="dropdown-item" href="/login-nv">Đăng nhập bằng tài khoản nhân viên</a></li>
+                <li th:if="${session.hodan == null && session.nv == null}"><a class="dropdown-item" href="/login">Đăng nhập bằng tài khoản hộ dân</a></li>
+                <li th:if="${session.hodan != null || session.nv != null}"><a th:if="${session.hodan != null || session.nv != null}" href="/logout" class="dropdown-item px-2 py-2 mx-3 text-lg font-semibold bg-red-500 hover:bg-red-700 text-white rounded-xl" onclick="return confirm('Bạn chắc chắn muốn đăng xuất?')">Đăng xuất</a></li>
+            </ul>
+        </div>
+    </nav>
+    
+    <div th:if="${session.hodan != null}" class="px-6 py-6">
+        <div class="w-1/2 my-6 mx-auto p-6 bg-gray-100 rounded-xl">
+            <h1 class="mb-6 text-3xl"><b>Thông tin khách hàng</b></h1>
+            <div>
+                <table class="mx-6 py-auto">
+                    <tbody>
+                      <tr>
+                        <td><b>Tên chủ hộ</b></td>
+                        <td><p th:text="${session.hodan?.tenChuHo}"></p></td>
+                      </tr>
+                      <tr>
+                        <td><b>SDT</b></td>
+                        <td><p th:text="${session.hodan?.sdt}"></p></td>
+                      </tr>
+                      <tr>
+                        <td><b>Địa chỉ</b></td>
+                        <td><p th:text="${session.hodan?.diaChiChiTiet + ', ' + session.hodan?.xaPhuong + ', ' + session.hodan?.quanHuyen + ', Hà Nội'}"></p></td>
+                      </tr>
+                      <tr>
+                        <td><b>Ngày duyệt</b></td>
+                        <td><p th:text="${#dates.format(session.hodan?.ngayduyet, 'dd/MM/yyyy')}"></p></td>
+                        
+                      </tr>
+                    </tbody>
+                  </table>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
